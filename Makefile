@@ -52,8 +52,8 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = main.cpp 
-OBJECTS       = main.o
+SOURCES       = pcap-test.c 
+OBJECTS       = pcap-test.o
 DIST          = ../../../Qt/6.1.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/6.1.2/gcc_64/mkspecs/common/unix.conf \
 		../../../Qt/6.1.2/gcc_64/mkspecs/common/linux.conf \
@@ -171,7 +171,7 @@ DIST          = ../../../Qt/6.1.2/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../Qt/6.1.2/gcc_64/mkspecs/features/exceptions.prf \
 		../../../Qt/6.1.2/gcc_64/mkspecs/features/yacc.prf \
 		../../../Qt/6.1.2/gcc_64/mkspecs/features/lex.prf \
-		pcap-test.pro  main.cpp
+		pcap-test.pro  pcap-test.c
 QMAKE_TARGET  = pcap-test
 DESTDIR       = 
 TARGET        = pcap-test
@@ -463,8 +463,8 @@ compiler_clean:
 
 ####### Compile
 
-main.o: main.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+pcap-test.o: pcap-test.c 
+	$(CC) -c $(CFLAGS) $(INCPATH) -o pcap-test.o pcap-test.c
 
 ####### Install
 
