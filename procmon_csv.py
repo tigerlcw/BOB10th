@@ -1,3 +1,4 @@
+# pip3 install -r requirements.txt 설정 파일 인스톨하기
 import os
 from time import sleep
 import pandas as pd
