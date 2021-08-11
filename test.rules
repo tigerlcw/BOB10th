@@ -1,0 +1,23 @@
+alert tcp any any -> any 80 (msg:"gilgil.net access"; content:"GET /"; content:"Host: "; content:"gilgil.net"; sid:10001; rev:1;)
+
+alert tcp any any -> any 80 (msg:"netflix.com access"; content:"GET /"; content:"Host: "; content:"netflix.com"; sid:10002; rev:1;)
+
+alert tcp any any -> any 80 (msg:"qt.io access"; content:"GET /"; content:"Host: "; content:"qt.io"; sid:10003; rev:1;)
+alert tcp any any -> any 443 (msg:"네이버 접속 완료!"; tls_sni; content:"naver.com"; nocase; sid:10004; rev:1;)
+alert tcp any any -> any 443 (msg:"다음 접속 완료!"; tls_sni; content:"daum.net"; nocase; sid:10005; rev:1;)
+alert tcp any any -> any 443 (msg:"한성대학교 공홈 접속 완료!"; tls_sni; content:"hansung.ac.kr"; nocase; sid:10006; rev:1;)
+alert tcp any any -> any 80 (msg:"한성대학교 컴공홈 접속 완료!"; content:"GET /"; content:"Host: "; content:"cse.hansung.ac.kr"; nocase; sid:10007; rev:1;)
+alert tcp any any -> any 443 (msg:"Q-net 접속 완료!"; tls_sni; content:"q-net.or.kr"; nocase; sid:10008; rev:1;)
+alert tcp any any -> any 443 (msg:"BoB 공홈 접속 완료!"; tls_sni; content:"kitribob.kr"; nocase; sid:10009; rev:1;)
+alert tcp any any -> any 443 (msg:"github 접속 완료!"; tls_sni; content:"github.com"; nocase; sid:10010; rev:1;)
+alert tcp any any -> any 443 (msg:"topcit 접속 완료!"; tls_sni; content:"topcit.or.kr"; nocase; sid:10011; rev:1;)
+alert tcp any any -> any 443 (msg:"사람인 접속 완료!"; tls_sni; content:"aramin.co.kr"; nocase; sid:10012; rev:1;)
+alert tcp any any -> any 443 (msg:"잡코리아 접속 완료!"; tls_sni; content:"jobkorea.co.kr"; nocase; sid:10013; rev:1;)
+alert tcp any any -> any 443 (msg:"링크드인.kr 접속 완료!"; tls_sni; content:"kr.linkedin.com"; nocase; sid:10014; rev:1;)
+alert tcp any any -> any 443 (msg:"watcha 접속 완료!"; tls_sni; content:"watcha.com"; nocase; sid:10015; rev:1;)
+alert tcp any any -> any 443 (msg:"나무위키 접속 완료!"; tls_sni; content:"namu.wiki"; nocase; sid:10016; rev:1;)
+alert tcp any any -> any 443 (msg:"삼성전자 접속 완료!"; tls_sni; content:"samsung.com"; nocase; sid:10017; rev:1;)
+alert tcp any any -> any 443 (msg:"엘지전자 접속 완료!"; tls_sni; content:"lge.co.kr"; nocase; sid:10018; rev:1;)
+alert tcp any any -> any 80 (msg:"sk 접속 완료!"; content:"GET /"; content:"Host: "; content:"sk.co.kr"; nocase; sid:10019; rev:1;)
+alert tcp any any -> any 443 (msg:"onoffmix 접속 완료!"; tls_sni; content:"onoffmix.com"; nocase; sid:10020; rev:1;)
+
