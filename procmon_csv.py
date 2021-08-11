@@ -13,8 +13,8 @@ import re
 
 '''해당 부분은 VBOX 조정'''
 # gui / headless - 백그라운드 실행
-#os.system('VBoxManage startvm boan_sol_win --type headless')
-#sleep(60)
+os.system('VBoxManage startvm boan_sol_win --type gui')
+sleep(40)
 file_name = input("분석할 파일이름을 입력하세요. -> ")
 add_func = input("테스트용 명령어 인자를 추가해주세요. 없으면 Enter Ex) /all -> ")
 
@@ -28,13 +28,13 @@ sleep(10)
 
 '''이 부분부터는 프로세스모니터 조종'''
 
-os.system('start /b VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 /c Procmon64 /BackingFile C:\\test\\monitor.pml')
+os.system('start /b VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 /c Procmon /BackingFile C:\\test\\monitor.pml')
 sleep(5)
 os.system('start /b VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 /c C:\\test\\%s /c %s' % (file_name, add_func))
 sleep(4)
-os.system('start /b VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 /c Procmon64 /Terminate')
+os.system('start /b VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 /c Procmon /Terminate')
 sleep(8) #ipconfig 8sec
-os.system('start /b VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 /c Procmon64 /OpenLog C:\\test\\monitor.pml /SaveAs C:\\test\\monitor.csv')
+os.system('start /b VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 /c Procmon /OpenLog C:\\test\\monitor.pml /SaveAs C:\\test\\monitor.csv')
 sleep(2)
 print("no error step 1")
 os.system('VBoxManage guestcontrol boan_sol_win copyfrom --target-directory C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\ C:\\test\\monitor.csv --username test --password 1234 --verbose')
@@ -43,7 +43,7 @@ sleep(2)
 # 1. 와샥키고 -> 2. 이더넷 고르고 3. 패킷 다른이름 저장누르고 4. 경로 설정 및 이름 설정
 # -c 20 -> 20개 패킷 
 # 게스트에서 tshark 명령 실행 후 바로 호스트 피시로 결과.csv 파일이 전달 옴 ㄱㅇㄷ
-os.system('VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 --wait-stdout -- cmd.exe /c tshark -i eth0 -T fields -E separator=, -E quote=d -e _ws.col.No. -e _ws.col.Time -e _ws.col.Source -e _ws.col.Destination -e _ws.col.Protocol -e _ws.col.Length -e _ws.col.Info -c 10' + '> C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\shark.csv')
+os.system('VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 --wait-stdout -- cmd.exe /c tshark -i 이더넷 -T fields -E separator=, -E quote=d -e _ws.col.No. -e _ws.col.Time -e _ws.col.Source -e _ws.col.Destination -e _ws.col.Protocol -e _ws.col.Length -e _ws.col.Info -c 10' + ' > C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\shark.csv')
 print("성공")
 sleep(2)
 
