@@ -11,7 +11,7 @@ alert tcp any any -> any 443 (msg:"Q-net 접속 완료!"; tls_sni; content:"q-ne
 alert tcp any any -> any 443 (msg:"BoB 공홈 접속 완료!"; tls_sni; content:"kitribob.kr"; nocase; sid:10009; rev:1;)
 alert tcp any any -> any 443 (msg:"github 접속 완료!"; tls_sni; content:"github.com"; nocase; sid:10010; rev:1;)
 alert tcp any any -> any 443 (msg:"topcit 접속 완료!"; tls_sni; content:"topcit.or.kr"; nocase; sid:10011; rev:1;)
-alert tcp any any -> any 443 (msg:"사람인 접속 완료!"; tls_sni; content:"aramin.co.kr"; nocase; sid:10012; rev:1;)
+alert tcp any any -> any 443 (msg:"사람인 접속 완료!"; tls_sni; content:"saramin.co.kr"; nocase; sid:10012; rev:1;)
 alert tcp any any -> any 443 (msg:"잡코리아 접속 완료!"; tls_sni; content:"jobkorea.co.kr"; nocase; sid:10013; rev:1;)
 alert tcp any any -> any 443 (msg:"링크드인.kr 접속 완료!"; tls_sni; content:"kr.linkedin.com"; nocase; sid:10014; rev:1;)
 alert tcp any any -> any 443 (msg:"watcha 접속 완료!"; tls_sni; content:"watcha.com"; nocase; sid:10015; rev:1;)
