@@ -10,7 +10,6 @@ import csv
 import numpy as np
 import re
 
-
 '''해당 부분은 VBOX 조정'''
 # gui / headless - 백그라운드 실행
 os.system('VBoxManage startvm boan_sol_win --type gui')
@@ -43,7 +42,7 @@ sleep(2)
 # 1. 와샥키고 -> 2. 이더넷 고르고 3. 패킷 다른이름 저장누르고 4. 경로 설정 및 이름 설정
 # -c 20 -> 20개 패킷 
 # 게스트에서 tshark 명령 실행 후 바로 호스트 피시로 결과.csv 파일이 전달 옴 ㄱㅇㄷ
-os.system('VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 --wait-stdout -- cmd.exe /c tshark -i 이더넷 -T fields -E separator=, -E quote=d -e _ws.col.No. -e _ws.col.Time -e _ws.col.Source -e _ws.col.Destination -e _ws.col.Protocol -e _ws.col.Length -e _ws.col.Info -c 10' + ' > C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\shark.csv')
+os.system('VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 --wait-stdout -- cmd.exe /c tshark -i 이더넷 -T fields -E separator=, -E quote=d -e _ws.col.No. -e _ws.col.Time -e _ws.col.Source -e _ws.col.Destination -e _ws.col.Protocol -e _ws.col.Length -e _ws.col.Info -c 3' + ' > C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\shark.csv')
 print("성공")
 sleep(1)
 
@@ -72,7 +71,7 @@ df_unique = df[process]
 operation = df_unique['Operation'] == 'CreateFile'
 df1 = df_unique[operation]
 df1 = df1[['Path']]
-df1['name'] = df1['Path'].str.extract(r'([ \w-]+\.+[ \w-]+)')
+df1['name'] = df1['Path'].str.extract(r'([^\/\n]+$)')
 #(?<=\$)[0-9.]+
 
 df1 = df1.dropna(axis=0)
@@ -98,3 +97,4 @@ df3 = df2.groupby(cols)['total'].sum().reset_index()
 df3 = df3.sort_values(by = 'total')
 df3 = df3.reset_index(drop=True)
 print(df3)
+
