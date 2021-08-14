@@ -48,9 +48,9 @@ def main():
                 procmon_csv.vm_snapdelete()
                 
             else:
-                print('\nERROR: Enter a valid option!!')
+                print('\nERROR: 다시입력행')
         except ValueError:
-            print('\nERROR: Enter a valid option!!')
+            print('\nERROR: 다시입력행')
     return
 print("=============================================")
 
