@@ -67,7 +67,7 @@ def file_search():
         print("Yes. it is a file")
     else :
         print("Nothing")
-        os.system('python ./volatility3-develop//vol.py --write-config -f ' + vmemfile + ' windows.info')
+        os.system('python C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\volatility3-develop\\vol.py --write-config -f ' + vmemfile + ' windows.info')
     
     process = df['Process Name'] == file_name 
     df_unique = df[process]
