@@ -7,8 +7,7 @@ from datetime import datetime
 import csv
 import numpy as np
 import re
-import procmon_csv_final
-
+import procmon_csv
 # 볼라티비티 명령어 python vol.py --write-config -f ../test_sleep.vmem windows.info
 
 def print_menu():
@@ -18,9 +17,9 @@ def print_menu():
     # VM 시작 코드
     print('2 = VM 스냅샷 찍기')
     # VM 스냅샷 찍기
-    print('3 = 악성 프로그램 판단')
+    print('3 = 파일 검사')
     # 프로세스모니터 와이어샤크 // 볼라티비티 + 현종이형 코드 + 황병우형 코드
-    print('4 = 공사중')
+    print('4 = VM 스냅샷 삭제')
     return
 
 
@@ -36,13 +35,13 @@ def main():
                 print('프로그램과 VM을 종료합니다.\n')
                 os.system('VBoxManage controlvm boan_sol_win poweroff')
             elif option == 1:
-                procmon_csv_final.vm_start()
+                procmon_csv.vm_start()
             elif option == 2:
-                procmon_csv_final.vm_snapshot()
+                procmon_csv.vm_snapshot()
             elif option == 3:
-                procmon_csv_final.file_search()
+                procmon_csv.file_search()
             elif option == 4:
-                procmon_csv_final.vm_snapdelete()
+                procmon_csv.vm_snapdelete()
                 
             else:
                 print('\nERROR: 다시 입력하세요!!!')

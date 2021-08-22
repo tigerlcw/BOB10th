@@ -11,6 +11,7 @@ import glob
 
 vmemfile = 'C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\test.vmem'
 configfile = 'C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\config.json'
+volatility = 'C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\volatility3-develop\\vol.py'
 
 # 1번 
 def vm_start():
@@ -43,7 +44,7 @@ def file_search():
   
     sleep(2)
     # 와이어샤크 조종
-    os.system('VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 --wait-stdout -- cmd.exe /c tshark -i 이더넷 -T fields -E separator=, -E quote=d -e _ws.col.No. -e _ws.col.Time -e _ws.col.Source -e _ws.col.Destination -e _ws.col.Protocol -e _ws.col.Length -e _ws.col.Info -c 3' + ' > C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\shark.csv')
+    os.system('VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 --wait-stdout -- cmd.exe /c tshark -i 이더넷 -T fields -E separator=, -E quote=d -e _ws.col.No. -e _ws.col.Time -e _ws.col.Source -e _ws.col.Destination -e _ws.col.Protocol -e _ws.col.Length -e _ws.col.Info -c 20' + ' > C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\shark.csv')
     sleep(4)
     os.system('start /b VBoxManage guestcontrol boan_sol_win run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 /c C:\\test\\%s /c %s' % (file_name, add_func))
     sleep(5)
@@ -100,6 +101,55 @@ def file_search():
     df3 = df3.reset_index(drop=True)
     print(df3,"\n")
 
+    print("\n netscan 플러그인 실행")
+    os.system('python %s -c C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\config.json -f %s windows.netscan.NetScan > C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\netscan.txt' % (volatility, vmemfile))
+    print("\nnetscan 분석 완료.\n")
+
+    ### Volatility 사용 시작 ###
+
+    def replace_in_file(file_path, old_str, new_str):
+
+        fr = open(file_path, 'r')
+        lines = fr.readlines()
+        fr.close()
+
+        fw = open(file_path, 'w')
+        for line in lines:
+            fw.write(line.replace(old_str, new_str))
+        fw.close()
+
+    def replace_in_file_cp949(file_path, old_str, new_str):
+
+        fr = open(file_path, 'rt', encoding='cp949')
+        lines = fr.readlines()
+        fr.close()
+
+        fw = open(file_path, 'w')
+        for line in lines:
+            fw.write(line.replace(old_str, new_str))
+        fw.close()
+
+    ### netscan 사용 ###
+    replace_in_file('C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\netscan.txt',"Volatility 3 Framework 1.2.0", " ")
+    ns = pd.read_csv('C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\netscan.txt', delimiter = '\t')
+    ns.to_csv('C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\netscan.csv')
+    ns1 = pd.read_csv('C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\netscan.csv', sep=",")
+    ns1
+
+    ns2 = ns1[ns1['Owner'].isin(file)]
+
+    try :
+        ns2.drop(['Unnamed: 0'], axis = 1, inplace = True)
+    except :
+        pass
+
+    print("\n특정 프로그램이 통신한 외부 ip주소와 포트번호 : ")
+    ns3 = ns2.drop_duplicates(['ForeignAddr', 'ForeignPort'])
+    ns3 = ns3.reset_index(drop=True)
+    ns3 = ns3[['ForeignAddr', 'ForeignPort', 'State']]
+    ns3 = ns3[ns3.ForeignPort != 0]
+    print(ns3)
+
     os.system('VBoxManage controlvm boan_sol_win poweroff')
     print('VM이 종료되었습니다.\n')
     sleep(1)
@@ -110,6 +160,70 @@ def file_search():
 
 # 4번
 def vm_snapdelete():
-    os.system('VBoxManage snapshot boan_sol_win delete win-test')
-    print("\n스냅샷 파일이 삭제되었습니다.\n")
+    print("\n netscan 플러그인 실행")
+    os.system('python %s -c C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\config.json -f %s windows.netscan.NetScan > C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\netscan.txt' % (volatility, vmemfile))
+    print("\nnetscan 분석 완료.\n")
+
+    ### Volatility 사용 시작 ###
+
+    df = pd.read_csv("C:/Users/LINKER/Desktop/PythonWorkspace/bosol/monitor.csv", error_bad_lines=False)
+    process = df['Process Name'] == 'test.exe' 
+    df_unique = df[process]
+    operation = df_unique['Operation'] == 'CreateFile'
+    df1 = df_unique[operation]
+    df1 = df1[['Path']]
+    df1['name'] = df1['Path'].str.extract(r'([^\\/\n]+$)')
+
+    df1 = df1.dropna(axis=0)
+    filename = df1['name'].reset_index()
+    filename.drop(['index'], axis=1, inplace=True)
+    input_name = 'test.exe' 
+
+    filename.loc[0] = [input_name]
+    filename.insert(0, 'total', 1)
+    file = filename.groupby('total')['name'].unique().loc[1]
+
+
+    def replace_in_file(file_path, old_str, new_str):
+
+        fr = open(file_path, 'r')
+        lines = fr.readlines()
+        fr.close()
+
+        fw = open(file_path, 'w')
+        for line in lines:
+            fw.write(line.replace(old_str, new_str))
+        fw.close()
+
+    def replace_in_file_cp949(file_path, old_str, new_str):
+
+        fr = open(file_path, 'rt', encoding='cp949')
+        lines = fr.readlines()
+        fr.close()
+
+        fw = open(file_path, 'w')
+        for line in lines:
+            fw.write(line.replace(old_str, new_str))
+        fw.close()
+
+    ### netscan 사용 ###
+    replace_in_file('C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\netscan.txt',"Volatility 3 Framework 1.2.0", " ")
+    ns = pd.read_csv('C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\netscan.txt', delimiter = '\t')
+    ns.to_csv('C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\netscan.csv')
+    ns1 = pd.read_csv('C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\netscan.csv', sep=",")
+    ns1
+
+    ns2 = ns1['Owner'] == 'svchost.exe'
+
+    try :
+        ns2.drop(['Unnamed: 0'], axis = 1, inplace = True)
+    except :
+        pass
+
+    print("\n특정 프로그램이 통신한 외부 ip주소와 포트번호 : ")
+    ns3 = ns2.drop_duplicates(['ForeignAddr', 'ForeignPort'])
+    ns3 = ns3.reset_index(drop=True)
+    ns3 = ns3[['ForeignAddr', 'ForeignPort', 'State']]
+    ns3 = ns3[ns3.ForeignPort != 0]
+    print(ns3)
     return
