@@ -7,12 +7,16 @@ import csv
 import numpy as np
 import re
 import glob
-#VBoxManage debugvm "boan_sol_win7" dumpvmcore --filename C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\test.vmem
 
 vmemfile = 'C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\test.vmem'
 configfile = 'C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\config.json'
 volatility = 'C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\volatility3-develop\\vol.py'
 volatility2 = 'C:\\Users\\LINKER\\Desktop\\PythonWorkspace\\bosol\\volatility2\\vol.py'
+
+'''[note] 
+boan_sol_win -> windows 10 pro 64bit
+boan_sol_win7 -> windows 7 ultimate 64 bit
+'''
 
 # 1번 
 def vm_start():
@@ -22,7 +26,7 @@ def vm_start():
 
 # 2번
 def vm_snapshot():
-    file_check = glob.glob("D:\\snapshot\\**") # 해당 폴더 내의 모든 파일 출력
+    file_check = glob.glob("D:\\snapshot\\**") # 해당 폴더 내의 모든 파일 출력 - VBox에서 스냅샷 경로 설정 안했음 기본 폴더 확인
     if len(file_check):
         print("스냅샷 파일이 있습니다.\n",file_check,"\n")
       
@@ -48,7 +52,7 @@ def file_search():
   
     sleep(2)
     os.system('start /b VBoxManage guestcontrol boan_sol_win7 run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 /c C:\\test\\%s /c %s' % (file_name, add_func))
-    sleep(10)
+    sleep(30)
     os.system('start /b VBoxManage guestcontrol boan_sol_win7 run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 /c Procmon /Terminate')
     sleep(6)
     os.system('start /b VBoxManage guestcontrol boan_sol_win7 run --exe "C:\Windows\SysWOW64\cmd.exe" --username test --password 1234 /c Procmon /OpenLog C:\\test\\monitor.pml /SaveAs C:\\test\\monitor.csv')
@@ -251,6 +255,13 @@ def file_search():
         print("\n=====================")
         print("\n정상 파일 입니다.\n")
         print("=====================\n")
+
+    os.system('VBoxManage controlvm boan_sol_win7 poweroff')
+    print('VM이 종료되었습니다.\n')
+    sleep(1)
+    os.system('VBoxManage snapshot boan_sol_win7 restore win-test') #스냅샷 시점으로 복원
+    os.system('VBoxManage startvm boan_sol_win7 --type gui')
+    print("프로그램 실행 전 상태로 복원되었습니다.\n")
 
     return
 

@@ -9,8 +9,6 @@ import numpy as np
 import re
 import procmon_csv_final
 
-# 볼라티비티 명령어 python vol.py --write-config -f ../test_sleep.vmem windows.info
-
 def print_menu():
     print('0 = 프로그램 종료') 
     # vm 종료 및 파이썬코드 종료
@@ -19,10 +17,9 @@ def print_menu():
     print('2 = VM 스냅샷 찍기')
     # VM 스냅샷 찍기
     print('3 = 악성 프로그램 판단')
-    # 프로세스모니터 와이어샤크 // 볼라티비티 + 현종이형 코드 + 황병우형 코드
+    # 프로세스모니터 와이어샤크 // 볼라티비티 + 현종이형 코드 + 황병우형 코드 + 스코어링
     print('4 = 공사중')
     return
-
 
 def main():
     option = -1
